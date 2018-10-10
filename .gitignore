@@ -102,3 +102,16 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# sequencing data
+*.ba[im]
+*.gz
+*.tbi
+*.tar
+*.bigwig
+
+# spreadsheets
+*.xls
+
+# macOS storage info
+*._*
