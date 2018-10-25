@@ -1,0 +1,15 @@
+Condition	Replicate	Count
+1stKD	pooled_rep	186751
+1stKD	rep1	136025
+1stKD	rep2	162709
+2ndKD	pooled_rep	196786
+2ndKD	rep1	88335
+2ndKD	rep2	122402
+2ndKD	rep3	145728
+Control	pooled_rep	203780
+Control	rep1	113637
+Control	rep2	112225
+Control	rep3	96697
+1stKD	idr	55200
+2ndKD	idr	42200
+Control	idr	38213
