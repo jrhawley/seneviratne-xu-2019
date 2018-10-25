@@ -105,6 +105,7 @@ venv.bak/
 
 # sequencing data
 *.ba[im]
+*.bed
 *.gz
 *.tbi
 *.tar
@@ -112,6 +113,8 @@ venv.bak/
 
 # spreadsheets
 *.xls
+
+.Rhistory
 
 # macOS storage info
 *._*
