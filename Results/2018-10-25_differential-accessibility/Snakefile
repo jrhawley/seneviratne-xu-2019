@@ -1,0 +1,28 @@
+rule filter_peaks:
+    input:
+        script = "filter-peaks.sh",
+        peaks = "../../Data/Processed/180913_D00165_0223_BCCGG2ANX_Schimmer_Mingjing/output_{cond}/peak/macs2/rep{rep}/{sample}.narrowPeak.gz"
+    output:
+        "FilteredPeaks/{cond}-Rep{rep}-sample.narrowPeak.gz"
+    shell:
+        "python {input.script} {input.peaks} -o {output}"
+
+
+rule generate_consensus:
+    input:
+        script = "generate-consensus.sh"
+    output:
+        "consensus.merged.filtered.bed"
+    shell:
+        "sh {input.script}"
+
+rule counts:
+    input:
+        bam = "../../Data/Processed/180913_D00165_0223_BCCGG2ANX_Schimmer_Mingjing/output_{cond}/align/rep{R}/{sample}.bam",
+        consensus = "consensus.merged.filtered.bed"
+    output:
+        "Counts/{cond}-Rep{R}-{sample}.bed"
+    wildcard_constraints:
+        sample = "[0-9A-z_]+"
+    shell:
+        "bedtools coverage -a {input.consensus} -b {input.bam} -counts | head > {output}"

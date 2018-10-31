@@ -115,6 +115,7 @@ venv.bak/
 *.xls
 
 .Rhistory
+**/.snakemake/*
 
 # macOS storage info
 *._*

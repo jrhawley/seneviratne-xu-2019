@@ -58,3 +58,9 @@ The similarity of ATAC profiles between replicates tends to be about the same as
 ## Conclusions
 
 There tends to be more accessible chromatin in the knockdowns compared to the control, but these differences are not statistically significant.
+
+## 2018-10-31 Update
+
+These peak lists use a filter of p < 0.01, which is not a very stringent filter.
+I'm not sure how much I trust these, given that there seems to be a lot of noise and very high peak counts for consensus lists.
+I'm going to try some manual filtering on these re-preprocessed data samples, then try this type of analysis again.
