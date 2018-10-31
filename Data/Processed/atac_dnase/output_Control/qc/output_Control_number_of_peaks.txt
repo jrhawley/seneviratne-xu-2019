@@ -1,0 +1,5 @@
+rep1	113637
+rep2	112225
+rep3	96697
+pooled	203780
+overlap	60437

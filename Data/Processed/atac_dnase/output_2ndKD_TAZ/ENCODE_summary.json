@@ -1,0 +1,383 @@
+{
+	"ENCODE_award_rfa" : "",
+	"ENCODE_assay_category" : "",
+	"ENCODE_assay_title" : "ATAC-seq",
+	"ENCODE_accession" : "",
+	"species" : "hg38",
+	"title" : "output_2ndKD_TAZ",
+	"data_files" : [
+		{
+			"aliases:array" : "[KLAB_PIPELINE:1337_3_S36_L008_R1_001.nodup.bam]",
+			"assembly" : "",
+			"award" : "",
+			"dataset" : "",
+			"derived_from:array" : "[KLAB_PIPELINE:1337_3_S36_L008_R1_001.fastq.gz]",
+			"file_format" : "bam",
+			"file_size" : "1291197277",
+			"lab" : "",
+			"md5sum" : "58ab75656536a6109e5218b1288a6054",
+			"output_type" : "alignments",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1",
+			"submitted_file_name" : "1337_3_S36_L008_R1_001.nodup.bam"
+		}
+		
+		,
+		{
+			"aliases:array" : "[KLAB_PIPELINE:1337_2_S32_L007_R1_001.nodup.bam]",
+			"assembly" : "",
+			"award" : "",
+			"dataset" : "",
+			"derived_from:array" : "[KLAB_PIPELINE:1337_2_S32_L007_R1_001.fastq.gz]",
+			"file_format" : "bam",
+			"file_size" : "1129924377",
+			"lab" : "",
+			"md5sum" : "1386ccde70370b8c7ddfaf51875f8e4b",
+			"output_type" : "alignments",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1",
+			"submitted_file_name" : "1337_2_S32_L007_R1_001.nodup.bam"
+		}
+		
+		,
+		{
+			"aliases:array" : "[KLAB_PIPELINE:1337_1_S37_L008_R1_001.nodup.bam]",
+			"assembly" : "",
+			"award" : "",
+			"dataset" : "",
+			"derived_from:array" : "[KLAB_PIPELINE:1337_1_S37_L008_R1_001.fastq.gz]",
+			"file_format" : "bam",
+			"file_size" : "1205638689",
+			"lab" : "",
+			"md5sum" : "06cdcb076e59d9cb785fa465e4d9c9a9",
+			"output_type" : "alignments",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1",
+			"submitted_file_name" : "1337_1_S37_L008_R1_001.nodup.bam"
+		}
+		
+	],
+	"qc_files" : [
+		{
+			"contents" : "46958059\t0\t0\t0\t46692123\t0\t99.43\t0\t0\t0\t0\t0\t0\t0\t0\tN/A\t0\t0\t0\t0\tN/A\t0\t0",
+			"header" : "total\ttotal_qc_failed\tduplicates\tduplicates_qc_failed\tmapped\tmapped_qc_failed\tmapped_pct\tpaired\tpaired_qc_failed\tread1\tread1_qc_failed\tread2\tread2_qc_failed\tpaired_properly\tpaired_properly_qc_failed\tpaired_properly_pct\twith_itself\twith_itself_qc_failed\tsingletons\tsingletons_qc_failed\tsingletons_pct\tdiff_chroms\tdiff_chroms_qc_failed",
+			"info" : "rep1",
+			"qc_type" : "flagstat"
+		}
+		
+		,
+		{
+			"contents" : "51499030\t0\t0\t0\t51271402\t0\t99.56\t0\t0\t0\t0\t0\t0\t0\t0\tN/A\t0\t0\t0\t0\tN/A\t0\t0",
+			"header" : "total\ttotal_qc_failed\tduplicates\tduplicates_qc_failed\tmapped\tmapped_qc_failed\tmapped_pct\tpaired\tpaired_qc_failed\tread1\tread1_qc_failed\tread2\tread2_qc_failed\tpaired_properly\tpaired_properly_qc_failed\tpaired_properly_pct\twith_itself\twith_itself_qc_failed\tsingletons\tsingletons_qc_failed\tsingletons_pct\tdiff_chroms\tdiff_chroms_qc_failed",
+			"info" : "rep2",
+			"qc_type" : "flagstat"
+		}
+		
+		,
+		{
+			"contents" : "61407116\t0\t0\t0\t61226350\t0\t99.71\t0\t0\t0\t0\t0\t0\t0\t0\tN/A\t0\t0\t0\t0\tN/A\t0\t0",
+			"header" : "total\ttotal_qc_failed\tduplicates\tduplicates_qc_failed\tmapped\tmapped_qc_failed\tmapped_pct\tpaired\tpaired_qc_failed\tread1\tread1_qc_failed\tread2\tread2_qc_failed\tpaired_properly\tpaired_properly_qc_failed\tpaired_properly_pct\twith_itself\twith_itself_qc_failed\tsingletons\tsingletons_qc_failed\tsingletons_pct\tdiff_chroms\tdiff_chroms_qc_failed",
+			"info" : "rep3",
+			"qc_type" : "flagstat"
+		}
+		
+		,
+		{
+			"contents" : "37717780\t0\t0\t12233875\t0\tN/A\t0.324352",
+			"header" : "unpaired_reads\tpaired_reads\tunmapped_reads\tunpaired_dupes\tpaired_dupes\tpaired_opt_dupes\tdupes_pct",
+			"info" : "rep1",
+			"qc_type" : "dup"
+		}
+		
+		,
+		{
+			"contents" : "41248334\t0\t0\t15871664\t0\tN/A\t0.384783",
+			"header" : "unpaired_reads\tpaired_reads\tunmapped_reads\tunpaired_dupes\tpaired_dupes\tpaired_opt_dupes\tdupes_pct",
+			"info" : "rep2",
+			"qc_type" : "dup"
+		}
+		
+		,
+		{
+			"contents" : "49561892\t0\t0\t18767455\t0\tN/A\t0.378667",
+			"header" : "unpaired_reads\tpaired_reads\tunmapped_reads\tunpaired_dupes\tpaired_dupes\tpaired_opt_dupes\tdupes_pct",
+			"info" : "rep3",
+			"qc_type" : "dup"
+		}
+		
+		,
+		{
+			"contents" : "25483905\t0\t0\t0\t25483905\t0\t100.00\t0\t0\t0\t0\t0\t0\t0\t0\tN/A\t0\t0\t0\t0\tN/A\t0\t0",
+			"header" : "total\ttotal_qc_failed\tduplicates\tduplicates_qc_failed\tmapped\tmapped_qc_failed\tmapped_pct\tpaired\tpaired_qc_failed\tread1\tread1_qc_failed\tread2\tread2_qc_failed\tpaired_properly\tpaired_properly_qc_failed\tpaired_properly_pct\twith_itself\twith_itself_qc_failed\tsingletons\tsingletons_qc_failed\tsingletons_pct\tdiff_chroms\tdiff_chroms_qc_failed",
+			"info" : "rep1",
+			"qc_type" : "flagstat_filt"
+		}
+		
+		,
+		{
+			"contents" : "25376670\t0\t0\t0\t25376670\t0\t100.00\t0\t0\t0\t0\t0\t0\t0\t0\tN/A\t0\t0\t0\t0\tN/A\t0\t0",
+			"header" : "total\ttotal_qc_failed\tduplicates\tduplicates_qc_failed\tmapped\tmapped_qc_failed\tmapped_pct\tpaired\tpaired_qc_failed\tread1\tread1_qc_failed\tread2\tread2_qc_failed\tpaired_properly\tpaired_properly_qc_failed\tpaired_properly_pct\twith_itself\twith_itself_qc_failed\tsingletons\tsingletons_qc_failed\tsingletons_pct\tdiff_chroms\tdiff_chroms_qc_failed",
+			"info" : "rep2",
+			"qc_type" : "flagstat_filt"
+		}
+		
+		,
+		{
+			"contents" : "30794437\t0\t0\t0\t30794437\t0\t100.00\t0\t0\t0\t0\t0\t0\t0\t0\tN/A\t0\t0\t0\t0\tN/A\t0\t0",
+			"header" : "total\ttotal_qc_failed\tduplicates\tduplicates_qc_failed\tmapped\tmapped_qc_failed\tmapped_pct\tpaired\tpaired_qc_failed\tread1\tread1_qc_failed\tread2\tread2_qc_failed\tpaired_properly\tpaired_properly_qc_failed\tpaired_properly_pct\twith_itself\twith_itself_qc_failed\tsingletons\tsingletons_qc_failed\tsingletons_pct\tdiff_chroms\tdiff_chroms_qc_failed",
+			"info" : "rep3",
+			"qc_type" : "flagstat_filt"
+		}
+		
+		,
+		{
+			"contents" : "34044574\t25611563\t19132206\t4965969\t0.752295\t0.747014\t3.852663",
+			"header" : "total_read_pairs\tdistinct_read_pairs\tone_read_pair\ttwo_read_pair\tNRF\tPBC1\tPBC2",
+			"info" : "rep1",
+			"qc_type" : "pbc"
+		}
+		
+		,
+		{
+			"contents" : "34525819\t25498764\t18703152\t5123742\t0.738542\t0.733492\t3.650292",
+			"header" : "total_read_pairs\tdistinct_read_pairs\tone_read_pair\ttwo_read_pair\tNRF\tPBC1\tPBC2",
+			"info" : "rep2",
+			"qc_type" : "pbc"
+		}
+		
+		,
+		{
+			"contents" : "43193250\t30954362\t22160252\t6291624\t0.716648\t0.715901\t3.522183",
+			"header" : "total_read_pairs\tdistinct_read_pairs\tone_read_pair\ttwo_read_pair\tNRF\tPBC1\tPBC2",
+			"info" : "rep3",
+			"qc_type" : "pbc"
+		}
+		
+		,
+		{
+			"contents" : "25000000\t0\t0.263470457257483\t55\t0.2611989\t1500\t0.2581886\t1.020458\t1.754595",
+			"header" : "num_reads\test_frag_len\tcorr_est_frag_len\tphantom_peak\tcorr_phantom_peak\targmin_corr\tmin_corr\tNSC\tRSC",
+			"info" : "rep1",
+			"qc_type" : "xcor"
+		}
+		
+		,
+		{
+			"contents" : "25000000\t0\t0.269427033814881\t55\t0.2659749\t1500\t0.2567991\t1.049174\t1.376228",
+			"header" : "num_reads\test_frag_len\tcorr_est_frag_len\tphantom_peak\tcorr_phantom_peak\targmin_corr\tmin_corr\tNSC\tRSC",
+			"info" : "rep2",
+			"qc_type" : "xcor"
+		}
+		
+		,
+		{
+			"contents" : "25000000\t0\t0.267898672940016\t55\t0.2652513\t1500\t0.2577479\t1.039382\t1.352816",
+			"header" : "num_reads\test_frag_len\tcorr_est_frag_len\tphantom_peak\tcorr_phantom_peak\targmin_corr\tmin_corr\tNSC\tRSC",
+			"info" : "rep3",
+			"qc_type" : "xcor"
+		}
+		
+		,
+		{
+			"contents" : "88335\t122402\t145728\t196786\t61130",
+			"header" : "rep1\trep2\trep3\tpooled\toverlap",
+			"info" : "null",
+			"qc_type" : "num_peaks"
+		}
+		
+		,
+		{
+			"contents" : "0.0326626",
+			"header" : "FRiP",
+			"info" : "rep1-rep2",
+			"qc_type" : "idr_FRiP"
+		}
+		
+		,
+		{
+			"contents" : "0.0330586",
+			"header" : "FRiP",
+			"info" : "rep1-rep3",
+			"qc_type" : "idr_FRiP"
+		}
+		
+		,
+		{
+			"contents" : "0.0441962",
+			"header" : "FRiP",
+			"info" : "rep2-rep3",
+			"qc_type" : "idr_FRiP"
+		}
+		
+		,
+		{
+			"contents" : "42200\t\t\t0\t42200\t42200\trep2-rep3\trep2-rep3\t0.0\t1.0\tpass",
+			"header" : "Nt\tN1\tN2\tNp\tN_opt\tN_consv\topt_set\tconsv_set\trescue_ratio\tself_consistency_ratio\treproducibility_test",
+			"info" : "rep1",
+			"qc_type" : "idr"
+		}
+		
+	],
+	"ENCODE_quality_metrics" : [
+		{
+			"ENCODE_qc_type" : "samtools_flagstats_quality_metric",
+			"award" : "",
+			"diff_chroms" : "0",
+			"diff_chroms_qc_failed" : "0",
+			"duplicates" : "0",
+			"duplicates_qc_failed" : "0",
+			"lab" : "",
+			"mapped" : "61226350",
+			"mapped_pct" : "99.71",
+			"mapped_qc_failed" : "0",
+			"paired" : "0",
+			"paired_properly" : "0",
+			"paired_properly_pct" : "N/A",
+			"paired_properly_qc_failed" : "0",
+			"paired_qc_failed" : "0",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:1337_3_S36_L008_R1_001.nodup.bam]",
+			"read1" : "0",
+			"read1_qc_failed" : "0",
+			"read2" : "0",
+			"read2_qc_failed" : "0",
+			"singletons" : "0",
+			"singletons_pct" : "N/A",
+			"singletons_qc_failed" : "0",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1",
+			"total" : "61407116",
+			"total_qc_failed" : "0",
+			"with_itself" : "0",
+			"with_itself_qc_failed" : "0"
+		}
+		
+		,
+		{
+			"ENCODE_qc_type" : "samtools_flagstats_quality_metric",
+			"award" : "",
+			"diff_chroms" : "0",
+			"diff_chroms_qc_failed" : "0",
+			"duplicates" : "0",
+			"duplicates_qc_failed" : "0",
+			"lab" : "",
+			"mapped" : "51271402",
+			"mapped_pct" : "99.56",
+			"mapped_qc_failed" : "0",
+			"paired" : "0",
+			"paired_properly" : "0",
+			"paired_properly_pct" : "N/A",
+			"paired_properly_qc_failed" : "0",
+			"paired_qc_failed" : "0",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:1337_2_S32_L007_R1_001.nodup.bam]",
+			"read1" : "0",
+			"read1_qc_failed" : "0",
+			"read2" : "0",
+			"read2_qc_failed" : "0",
+			"singletons" : "0",
+			"singletons_pct" : "N/A",
+			"singletons_qc_failed" : "0",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1",
+			"total" : "51499030",
+			"total_qc_failed" : "0",
+			"with_itself" : "0",
+			"with_itself_qc_failed" : "0"
+		}
+		
+		,
+		{
+			"ENCODE_qc_type" : "samtools_flagstats_quality_metric",
+			"award" : "",
+			"diff_chroms" : "0",
+			"diff_chroms_qc_failed" : "0",
+			"duplicates" : "0",
+			"duplicates_qc_failed" : "0",
+			"lab" : "",
+			"mapped" : "46692123",
+			"mapped_pct" : "99.43",
+			"mapped_qc_failed" : "0",
+			"paired" : "0",
+			"paired_properly" : "0",
+			"paired_properly_pct" : "N/A",
+			"paired_properly_qc_failed" : "0",
+			"paired_qc_failed" : "0",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:1337_1_S37_L008_R1_001.nodup.bam]",
+			"read1" : "0",
+			"read1_qc_failed" : "0",
+			"read2" : "0",
+			"read2_qc_failed" : "0",
+			"singletons" : "0",
+			"singletons_pct" : "N/A",
+			"singletons_qc_failed" : "0",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1",
+			"total" : "46958059",
+			"total_qc_failed" : "0",
+			"with_itself" : "0",
+			"with_itself_qc_failed" : "0"
+		}
+		
+		,
+		{
+			"ENCODE_qc_type" : "complexity_xcorr_quality_metric",
+			"NRF" : "0.716648",
+			"NSC" : "1.039382",
+			"PBC1" : "0.715901",
+			"PBC2" : "3.522183",
+			"RSC" : "1.352816",
+			"award" : "",
+			"cross_correlation_plot" : "/mnt/work1/users/carlsgroup/workinprogres/nibeh/atac_dnase_pipelines6/output_2ndKD_TAZ/qc/rep3/1337_3_S36_L008_R1_001.nodup.25M.cc.plot.pdf",
+			"fragment length" : "0",
+			"lab" : "",
+			"paired-end" : "false",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:1337_3_S36_L008_R1_001.nodup.bam]",
+			"read length" : "50",
+			"sample size" : "25000000",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"
+		}
+		
+		,
+		{
+			"ENCODE_qc_type" : "complexity_xcorr_quality_metric",
+			"NRF" : "0.752295",
+			"NSC" : "1.020458",
+			"PBC1" : "0.747014",
+			"PBC2" : "3.852663",
+			"RSC" : "1.754595",
+			"award" : "",
+			"cross_correlation_plot" : "/mnt/work1/users/carlsgroup/workinprogres/nibeh/atac_dnase_pipelines6/output_2ndKD_TAZ/qc/rep1/1337_1_S37_L008_R1_001.nodup.25M.cc.plot.pdf",
+			"fragment length" : "0",
+			"lab" : "",
+			"paired-end" : "false",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:1337_1_S37_L008_R1_001.nodup.bam]",
+			"read length" : "50",
+			"sample size" : "25000000",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"
+		}
+		
+		,
+		{
+			"ENCODE_qc_type" : "complexity_xcorr_quality_metric",
+			"NRF" : "0.738542",
+			"NSC" : "1.049174",
+			"PBC1" : "0.733492",
+			"PBC2" : "3.650292",
+			"RSC" : "1.376228",
+			"award" : "",
+			"cross_correlation_plot" : "/mnt/work1/users/carlsgroup/workinprogres/nibeh/atac_dnase_pipelines6/output_2ndKD_TAZ/qc/rep2/1337_2_S32_L007_R1_001.nodup.25M.cc.plot.pdf",
+			"fragment length" : "0",
+			"lab" : "",
+			"paired-end" : "false",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:1337_2_S32_L007_R1_001.nodup.bam]",
+			"read length" : "50",
+			"sample size" : "25000000",
+			"step_run" : "anshul-kundaje:atac-seq-trim-align-filter-step-run-v1"
+		}
+		
+		,
+		{
+			"ENCODE_qc_type" : "generic_quality_metric",
+			"attachment" : "/mnt/work1/users/carlsgroup/workinprogres/nibeh/atac_dnase_pipelines6/output_2ndKD_TAZ/qc/output_2ndKD_TAZ.all_quality_metrics.tar",
+			"award" : "",
+			"lab" : "",
+			"name" : ":All calculated QC",
+			"quality_metric_of:array" : "[KLAB_PIPELINE:output_2ndKD_TAZ_rep2-rep3.IDR0.1.narrowPeak.gz]",
+			"step_run" : "anshul-kundaje:atac-seq-idr-step-run-v1"
+		}
+		
+	]
+}
