@@ -81,3 +81,36 @@ For a variety of thresholds, here are the peak counts:
 | Ctrl      | 1         | 29078 |
 | Ctrl      | 2         | 14569 |
 | Ctrl      | 3         | 22475 |
+
+### Off-peak noise
+
+I generated filtered peak lists based on different q-value thresholds via `Rscript filter-peaks.R`.
+
+The number of total (non-duplicate) reads for each sample is as follows (as determined via `count-mapped-reads.sh`):
+
+| Condition | Replicate | Mapped Reads |
+| --------- | --------- | ------------ |
+| 1stKD     | 1         | 15262836     |
+| 1stKD     | 2         | 27004173     |
+| 2ndKD     | 1         | 25483905     |
+| 2ndKD     | 2         | 25376670     |
+| 2ndKD     | 3         | 30794437     |
+| Ctrl      | 1         | 33802938     |
+| Ctrl      | 2         | 30224754     |
+| Ctrl      | 3         | 33243705     |
+
+I then counted the number of reads that align to the peaks filtered at various thresholds via `qsub count-reads-in-peaks.sh`.
+
+We get the following percentages for reads called within peaks:
+
+![Reads called within peaks for each sample](reads-within-peaks.png)
+
+As can be seen in the figure above, the drop-offs are pretty linear wrt the threshold in log space.
+Using a threshold of 2.5 is a good middle-of-the-pack cutoff with peak counts in the 17K - 82K range across all samples.
+
+The 1stKD has the best signal-to-noise ratio for its samples, since the percentage of reads in peaks is ~ 18% for this threshold, whereas for the 2ndKD it's beween 2.5-8%, and 5-10% for the controls.
+
+## Conclusions
+
+Using a q-value threshold of -log10(q) >= 2.5 is a good threshold that keeps reasonable read counts and moderate signal-to-noise ratios across all samples.
+I'll be using the peak list from these filtered peaks moving forward.

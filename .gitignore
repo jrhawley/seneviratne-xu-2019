@@ -110,12 +110,14 @@ venv.bak/
 *.tbi
 *.tar
 *.bigwig
+*.narrowPeak
 
 # spreadsheets
 *.xls
 
 .Rhistory
 **/.snakemake/*
+**/Logs/*
 
 # macOS storage info
 *._*
