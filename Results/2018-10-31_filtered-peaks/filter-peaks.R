@@ -37,6 +37,7 @@ for (i in 1:length(peak_metadata$File)) {
 
     for (threshold in c(1, 2, 2.5, 3, 4)) {
         fwrite(
+            # filter by threshold
             peaks[logq >= threshold, .SD],
             paste0("Filter/logq_", threshold, "/", peak_metadata[i, Condition], "_Rep", peak_metadata[i, Replicate], ".narrowPeak"),
             col.names = FALSE,

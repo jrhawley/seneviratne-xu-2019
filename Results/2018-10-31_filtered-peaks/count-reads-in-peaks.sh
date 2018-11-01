@@ -29,7 +29,7 @@ bam=${BAMS[$i]}
 echo "$con Rep$rep"
 for t in ${THRESHOLDS[@]};
 do
-    peak="Filter/logq_${t}/${con}_Rep${rep}.narrowPeak"
+    peak="Filter/logq_${t}/${con}_Rep${rep}.filtered.narrowPeak"
     echo $t
     echo "  $peak"
     # echo "bedtools coverage -abam $bam -b $peak -counts > Counts/logq_${t}/${con}_Rep${rep}.bed"

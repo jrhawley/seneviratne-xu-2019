@@ -85,6 +85,7 @@ For a variety of thresholds, here are the peak counts:
 ### Off-peak noise
 
 I generated filtered peak lists based on different q-value thresholds via `Rscript filter-peaks.R`.
+Chr X, Y, MT, and non-canonical chromosomes were also removed with `sh filter-noncanonical-chrs.sh`.
 
 The number of total (non-duplicate) reads for each sample is as follows (as determined via `count-mapped-reads.sh`):
 
@@ -101,7 +102,7 @@ The number of total (non-duplicate) reads for each sample is as follows (as dete
 
 I then counted the number of reads that align to the peaks filtered at various thresholds via `qsub count-reads-in-peaks.sh`.
 
-We get the following percentages for reads called within peaks:
+We get the following percentages for reads called within peaks (generated via `Rscript plot-reads-in-peaks.R`):
 
 ![Reads called within peaks for each sample](reads-within-peaks.png)
 
