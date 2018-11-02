@@ -52,3 +52,9 @@ Surprisingly, not all of the Ctrl samples are clustering together.
 Ctrl Rep2 seems to cluster more closely to 2ndKD Rep1 (Jaccard = 0.418) instead of with the other Ctrl samples (0.435 and 0.494, respectively).
 
 Overall, similarly to the first analysis attempt, the samples from the same condition don't cluster together as tightly as one would hope.
+The similarity of ATAC profiles between replicates tends to be about the same as that between different conditions.
+
+## Conclusions
+
+There tends to be more accessible chromatin in the knockdowns compared to the control, but these differences are not statistically significant.
+Samples from the same condition do not necessarily cluster together, and the 2ndKD appears to be more similar to the Ctrl samples than the 1stKD, although they have a higher number (not bp of intersection) of similar peaks.
