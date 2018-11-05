@@ -15,3 +15,6 @@ Then calculate Jaccard indices and Upset plots.
 
 After I've removed the duplicate peak calls from `--call-summits` in MACS2, I've re-run the global comparisons of peak counts and bp counts.
 I've also updated the figure and added a `Snakefile`.
+
+I'm also changing the way I generate consensus sets for comparisons as per Aditi's advice (see above).
+This is detailed in `generate-consensus.sh`.

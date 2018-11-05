@@ -11,7 +11,7 @@ suppressMessages(library("GenomicRanges"))
 #'
 #' @param filename
 #' @return GRanges
-np2granges <- function(filename, zipped = FALSE) {
+bed2gr <- function(filename, zipped = FALSE) {
     if (zipped) {
         filename = paste("zcat", filename)
     }
@@ -31,12 +31,12 @@ np2granges <- function(filename, zipped = FALSE) {
 peak_metadata = data.table(
     Condition = c("1stKD", "2ndKD", "Ctrl")
 )
-peak_metadata[, File := paste0("Consensus/", Condition, ".merged.bed")]
+peak_metadata[, File := paste0("Consensus/", Condition, ".bed")]
 
-consensus = "Consensus/consensus.merged.bed"
+consensus = "Consensus/consensus.bed"
 
 # want to keep both the data.table and the GRanges object
-query = np2granges(consensus)
+query = bed2gr(consensus)
 queryDF = data.frame(query)
 # remove unnecessary width and strand columns
 queryDF$width <- NULL
@@ -47,7 +47,7 @@ queryDF$strand <- NULL
 # ==============================================================================
 for (i in 1:peak_metadata[, .N]){
   print(i)
-  subject = np2granges(peak_metadata[i, File])
+  subject = bed2gr(peak_metadata[i, File])
   cat("Finding overlaps\n")
   hits = findOverlaps(query, subject)
   cat("  Done\n")
@@ -58,7 +58,7 @@ for (i in 1:peak_metadata[, .N]){
 
 fwrite(
     queryDF,
-    "Consensus/consensus-binary-matrix.tsv",
+    "Consensus/consensus-matrix.tsv",
     col.names = TRUE,
     sep = "\t"
 )

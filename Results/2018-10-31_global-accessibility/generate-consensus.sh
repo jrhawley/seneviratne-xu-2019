@@ -2,25 +2,42 @@ CONDITIONS=("1stKD" "1stKD" "2ndKD" "2ndKD" "2ndKD" "Ctrl" "Ctrl" "Ctrl")
 REPS=(1 2 1 2 3 1 2 3)
 
 # get corresponding peak files
-peaks_all=$(for i in {0..7}; do echo "../2018-10-31_filtered-peaks/Filter/logq_2.5/${CONDITIONS[$i]}_Rep${REPS[$i]}.filtered.narrowPeak"; done)
-peaks_1stKD=$(for i in {0..1}; do echo "../2018-10-31_filtered-peaks/Filter/logq_2.5/${CONDITIONS[$i]}_Rep${REPS[$i]}.filtered.narrowPeak"; done)
-peaks_2ndKD=$(for i in {2..4}; do echo "../2018-10-31_filtered-peaks/Filter/logq_2.5/${CONDITIONS[$i]}_Rep${REPS[$i]}.filtered.narrowPeak"; done)
-peaks_Ctrl=$(for i in {5..7}; do echo "../2018-10-31_filtered-peaks/Filter/logq_2.5/${CONDITIONS[$i]}_Rep${REPS[$i]}.filtered.narrowPeak"; done)
+peaks_all=( \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/1stKD_Rep1.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/1stKD_Rep2.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/2ndKD_Rep1.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/2ndKD_Rep2.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/2ndKD_Rep3.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/Ctrl_Rep1.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/Ctrl_Rep2.bedGraph" \
+    "../2018-10-31_filtered-peaks/Filter/logq_2.5/Ctrl_Rep3.bedGraph" \
+)
+# slice array corresponding to each condition
+peaks_1stKD=(${peaks_all[@]:0:2})
+peaks_2ndKD=(${peaks_all[@]:2:3})
+peaks_Ctrl=(${peaks_all[@]:5:3})
 
-# print first 3 columns (i.e. genomic coordinates) then sort the entire BED file
-echo "Sorting peaks"
-echo "  Consensus"
-awk -v FS="\t" -v OFS="\t" '{print $1, $2, $3}' ${peaks_all} | sort -k1,1 -k2,2n > Consensus/consensus.bed
+# intersect peaks in each condition to get a common set for a given condition
+echo "Calculating condition intersections"
 echo "  1stKD"
-awk -v FS="\t" -v OFS="\t" '{print $1, $2, $3}' ${peaks_1stKD} | sort -k1,1 -k2,2n > Consensus/1stKD.bed
+bedtools intersect -a ${peaks_1stKD[0]} -b ${peaks_1stKD[1]} -sorted > Consensus/1stKD.bedGraph
 echo "  2ndKD"
-awk -v FS="\t" -v OFS="\t" '{print $1, $2, $3}' ${peaks_2ndKD} | sort -k1,1 -k2,2n > Consensus/2ndKD.bed
+bedtools intersect -a ${peaks_2ndKD[0]} -b ${peaks_2ndKD[1]} -sorted > Consensus/2ndKD.bedGraph.temp
+bedtools intersect -a Consensus/2ndKD.bedGraph.temp -b ${peaks_2ndKD[2]} -sorted > Consensus/2ndKD.bedGraph
+rm Consensus/2ndKD.bedGraph.temp
 echo "  Ctrl"
-awk -v FS="\t" -v OFS="\t" '{print $1, $2, $3}' ${peaks_Ctrl} | sort -k1,1 -k2,2n > Consensus/Ctrl.bed
+bedtools intersect -a ${peaks_Ctrl[0]} -b ${peaks_Ctrl[1]} -sorted > Consensus/Ctrl.bedGraph.temp
+bedtools intersect -a Consensus/Ctrl.bedGraph.temp -b ${peaks_Ctrl[2]} -sorted > Consensus/Ctrl.bedGraph
+rm Consensus/Ctrl.bedGraph.temp
 
-# merge peaks together
-echo "Merging consensus peaks"
-bedtools merge -i Consensus/consensus.bed > Consensus/consensus.merged.bed
-bedtools merge -i Consensus/1stKD.bed > Consensus/1stKD.merged.bed
-bedtools merge -i Consensus/2ndKD.bed > Consensus/2ndKD.merged.bed
-bedtools merge -i Consensus/Ctrl.bed > Consensus/Ctrl.merged.bed
+# Remove -log10(q) column (i.e. only keep genomic coordinates)
+echo "Removing -log10(q) values"
+for i in {"1stKD","2ndKD","Ctrl"};
+do
+    echo "  $i"
+    awk -v FS="\t" -v OFS="\t" '{print $1, $2, $3}' Consensus/${i}.bedGraph > Consensus/${i}.bed
+done
+
+# generate consensus from the intersections
+echo "Generating consensus"
+cat Consensus/*.bed | sort -k1,1 -k 2,2n | bedtools merge -i stdin > Consensus/consensus.bed

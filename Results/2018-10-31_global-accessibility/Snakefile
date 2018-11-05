@@ -2,6 +2,7 @@ import pandas as pd
 
 CONFIG = pd.read_table("config.tsv", index_col=False)
 PEAKS = CONFIG["PeakFile"].tolist()
+CONDITIONS = CONFIG["Condition"].unique().tolist()
 
 rule permute_peaks_bp:
     input:
@@ -19,5 +20,26 @@ rule test_depth_support:
     output:
         "Global/peaks-bp.png",
         "Global/global-tests.tsv"
+    shell:
+        "Rscript {input.script}"
+
+rule generate_consensus:
+    input:
+        script = "generate-consensus.sh",
+        peaks = PEAKS
+    output:
+        expand("Consensus/{condition}.bed", condition=CONDITIONS),
+        expand("Consensus/{condition}.bedGraph", condition=CONDITIONS),
+        "Consensus/consensus.bed"
+    shell:
+        "sh {input.script}"
+
+rule binary_matrix:
+    input:
+        script = "generate-binary-matrix.R",
+        beds = expand("Consensus/{condition}.bed", condition=CONDITIONS),
+        consensus = "Consensus/consensus.bed"
+    output:
+        "Consensus/consensus-matrix.tsv"
     shell:
         "Rscript {input.script}"
