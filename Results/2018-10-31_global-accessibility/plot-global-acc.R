@@ -50,7 +50,7 @@ perm2samp <- function(
 # ==============================================================================
 # Data
 # ==============================================================================
-peaks = fread("num-peaks-bp.tsv")
+peaks = fread("Global/num-peaks-bp.tsv")
 
 # ==============================================================================
 # Analysis
@@ -88,7 +88,7 @@ test_results[Data == "bp", FDR := p.adjust(p, "fdr")]
 test_results[Data == "Peak", FDR := p.adjust(p, "fdr")]
 fwrite(
     test_results,
-    "global-tests.tsv",
+    "Global/global-tests.tsv",
     col.names = TRUE,
     sep = "\t"
 )
@@ -121,7 +121,7 @@ gg <- (
     + facet_wrap(~ dtype, scale = "free_y")
 )
 ggsave(
-    "peaks-bp.png",
+    "Global/peaks-bp.png",
     height = 12,
     width = 20,
     units = "cm"

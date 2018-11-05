@@ -8,23 +8,12 @@ Following up from `2018-10-10_global-accessibility/` using the re-preprocessed d
 
 To see whether there are differences in global accessibility between each of the 3 conditions, we can count the number of peaks from each sample, as well as the total number of base pairs contained within peaks.
 
-![Peak counts and bp in peaks per sample](peaks-bp.png)
+![Peak counts and bp in peaks per sample](Global/peaks-bp.png)
 
 We see that using both metrics, the Control case tends to have the least accessible chromatin, whereas the TAZ knockdowns tend to have more.
 
 None of the conditions are significantly different from each other (2 sample permutation test, see `plot-global-acc.R`).
-The results of the tests are as follows:
-
-| X       | Y     | Data  | Hypothesis | _p_   | _FDR_ |
-| ------- | ----- | ----- | ---------- | ----- | ----- |
-| Control | 1stKD | BP    | X >= Y     | 0.100 | 0.300 |
-| Control | 2ndKD | BP    | X >= Y     | 0.581 | 0.581 |
-| 1stKD   | 2ndKD | BP    | X = Y      | 0.200 | 0.300 |
-| Control | 1stKD | Peaks | X >= Y     | 0.033 | 0.100 |
-| Control | 2ndKD | Peaks | X >= Y     | 0.403 | 0.403 |
-| 1stKD   | 2ndKD | Peaks | X = Y      | 0.133 | 0.200 |
-
-These are also saved in `global-tests.tsv`.
+The results of the tests can be found in `Global/global-tests.tsv`.
 
 As before, none of the associations are significant, although there's a trend towards more open chromatin in the TAZ knockdowns.
 

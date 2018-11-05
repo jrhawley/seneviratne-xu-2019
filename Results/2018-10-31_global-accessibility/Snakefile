@@ -8,15 +8,16 @@ rule permute_peaks_bp:
         script = "count-bp-and-peaks.sh",
         peaks = PEAKS
     output:
-        "num-peaks-bp.tsv"
+        "Global/num-peaks-bp.tsv"
     shell:
         "sh {input.script}"
 
 rule test_depth_support:
     input:
         script = "plot-global-acc.R",
-        data = "num-peaks-bp.tsv"
+        data = "Global/num-peaks-bp.tsv"
     output:
-        "peaks-bp.png"
+        "Global/peaks-bp.png",
+        "Global/global-tests.tsv"
     shell:
         "Rscript {input.script}"

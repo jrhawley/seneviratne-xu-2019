@@ -1,7 +1,7 @@
 CONDITIONS=("1stKD" "1stKD" "2ndKD" "2ndKD" "2ndKD" "Ctrl" "Ctrl" "Ctrl")
 REPS=(1 2 1 2 3 1 2 3)
 
-OUTPUT="num-peaks-bp.tsv"
+OUTPUT="Global/num-peaks-bp.tsv"
 
 echo -e "Condition\tReplicate\tPeaks\tbp" > $OUTPUT
 
