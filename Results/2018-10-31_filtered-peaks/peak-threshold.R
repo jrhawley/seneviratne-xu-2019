@@ -5,36 +5,31 @@ suppressMessages(library("data.table"))
 suppressMessages(library("ggplot2"))
 
 # ==============================================================================
-# Functions
-# ==============================================================================
-
-# ==============================================================================
 # Data
 # ==============================================================================
 peak_metadata = data.table(
     File = c(
-        "../../Data/Processed/atac_dnase/output_1stKD_TAZ/peak/macs2/rep1/967_1_S31_L007_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_1stKD_TAZ/peak/macs2/rep2/967_2_S35_L008_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_2ndKD_TAZ/peak/macs2/rep1/1337_1_S37_L008_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_2ndKD_TAZ/peak/macs2/rep2/1337_2_S32_L007_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_2ndKD_TAZ/peak/macs2/rep3/1337_3_S36_L008_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_Control/peak/macs2/rep1/GFP_1_S38_L008_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_Control/peak/macs2/rep2/GFP_2_S33_L007_R1_001.nodup.tn5.pf.narrowPeak.gz",
-        "../../Data/Processed/atac_dnase/output_Control/peak/macs2/rep3/GFP_3_S34_L007_R1_001.nodup.tn5.pf.narrowPeak.gz"
+        "BedGraphs/1stKD_Rep1.filtered.sorted.unique.bedGraph",
+        "BedGraphs/1stKD_Rep2.filtered.sorted.unique.bedGraph",
+        "BedGraphs/2ndKD_Rep1.filtered.sorted.unique.bedGraph",
+        "BedGraphs/2ndKD_Rep2.filtered.sorted.unique.bedGraph",
+        "BedGraphs/2ndKD_Rep3.filtered.sorted.unique.bedGraph",
+        "BedGraphs/Ctrl_Rep1.filtered.sorted.unique.bedGraph",
+        "BedGraphs/Ctrl_Rep2.filtered.sorted.unique.bedGraph",
+        "BedGraphs/Ctrl_Rep3.filtered.sorted.unique.bedGraph"
     ),
     Condition = rep(c("1stKD", "2ndKD", "Ctrl"), c(2, 3, 3)),
     Replicate = c(1, 2, 1, 2, 3, 1, 2, 3)
 )
 
 peaks = rbindlist(lapply(
-    1:length(peak_metadata$File),
+    1:peak_metadata[, .N],
     function(i) {
         dt = fread(
-            paste("zcat", peak_metadata[i, File]),
+            peak_metadata[i, File],
             header = FALSE,
             sep = "\t",
-            col.names = c("chr", "start", "end", "logp", "logq"),
-            select = c(1:3, 8, 9)
+            col.names = c("chr", "start", "end", "logq"),
         )
         dt[, Condition := peak_metadata[i, Condition]]
         dt[, Replicate := peak_metadata[i, Replicate]]
@@ -45,13 +40,43 @@ peaks = rbindlist(lapply(
 # ==============================================================================
 # Analysis
 # ==============================================================================
-# use q-value cutoff to calculate peak counts
-peaks[logq >= 1, .N, by = c("Condition", "Replicate")]
-peaks[logq >= 2, .N, by = c("Condition", "Replicate")]
-peaks[logq >= 2.5, .N, by = c("Condition", "Replicate")]
-peaks[logq >= 3, .N, by = c("Condition", "Replicate")]
-peaks[logq >= 4, .N, by = c("Condition", "Replicate")]
-peaks[logq >= 5, .N, by = c("Condition", "Replicate")]
+# use q-value cutoff to calculate peak counts and save data
+fwrite(
+    peaks[logq >= 1, .N, by = c("Condition", "Replicate")],
+    "Filter/logq_1/peak-counts.tsv",
+    col.names = TRUE,
+    sep = "\t"
+)
+fwrite(
+    peaks[logq >= 2, .N, by = c("Condition", "Replicate")],
+    "Filter/logq_2/peak-counts.tsv",
+    col.names = TRUE,
+    sep = "\t"
+)
+fwrite(
+    peaks[logq >= 2.5, .N, by = c("Condition", "Replicate")],
+    "Filter/logq_2.5/peak-counts.tsv",
+    col.names = TRUE,
+    sep = "\t"
+)
+fwrite(
+    peaks[logq >= 3, .N, by = c("Condition", "Replicate")],
+    "Filter/logq_3/peak-counts.tsv",
+    col.names = TRUE,
+    sep = "\t"
+)
+fwrite(
+    peaks[logq >= 4, .N, by = c("Condition", "Replicate")],
+    "Filter/logq_4/peak-counts.tsv",
+    col.names = TRUE,
+    sep = "\t"
+)
+fwrite(
+    peaks[logq >= 5, .N, by = c("Condition", "Replicate")],
+    "Filter/logq_5/peak-counts.tsv",
+    col.names = TRUE,
+    sep = "\t"
+)
 
 # ==============================================================================
 # Plots

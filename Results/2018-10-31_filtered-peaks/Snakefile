@@ -1,0 +1,69 @@
+import pandas as pd
+
+CONFIG = pd.read_table("config.tsv", index_col=False)
+PEAKS = CONFIG["narrowPeak"].tolist()
+CONDITIONS = CONFIG["Condition"].tolist()
+REPLICATES = CONFIG["Replicate"].tolist()
+CASES = [c + "_Rep" + str(r) for (c, r) in zip(CONDITIONS, REPLICATES)]
+THRESHOLDS = [1, 2, 2.5, 3, 4, 5]
+
+rule preprocess_peaks:
+    input:
+        peaks = PEAKS
+    output:
+        expand("BedGraphs/{con}_Rep{rep}.filtered.sorted.unique.bedGraph",
+               zip,
+               con=CONDITIONS,
+               rep=REPLICATES
+               )
+    run:
+        "preprocess-peaks.py"
+
+rule q_vs_peaks:
+    input:
+        script = "peak-threshold.R",
+        peaks = expand(
+            "BedGraphs/{case}.filtered.sorted.unique.bedGraph", case=CASES)
+    output:
+        "q-threshold_vs_peak-counts.png",
+        expand("Filter/logq_{t}/peak-counts.tsv", t=THRESHOLDS)
+    shell:
+        "Rscript {input.script}"
+
+rule multifilter_peaks:
+    input:
+        script = "filter-peaks.R",
+        bgs = expand(
+            "BedGraphs/{case}.filtered.sorted.unique.bedGraph", case=CASES)
+    output:
+        expand("Filter/logq_{t}/{case}.bedGraph", t=THRESHOLDS, case=CASES)
+    shell:
+        "Rscript {input.script}"
+
+rule count_reads_in_peaks:
+    input:
+        script = "count-reads-in-peaks.sh",
+        peaks = expand(
+            "Filter/logq_{t}/{case}.bedGraph", t=THRESHOLDS, case=CASES)
+    output:
+        expand("Counts/logq_{t}/{case}.bedGraph", t=THRESHOLDS, case=CASES),
+        expand("Counts/logq_{t}/{case}.sorted.bedGraph",
+               t=THRESHOLDS, case=CASES)
+
+rule count_mapped_reads:
+    input:
+        script = "count-mapped-reads.sh"
+    output:
+        "Counts/mapped-reads.tsv"
+    shell:
+        "sh {input.script}"
+
+rule plot_reads_in_peaks:
+    input:
+        script = "plot-reads-in-peaks.R",
+        counts = expand(
+            "Counts/logq_{t}/{case}.sorted.bedGraph", t=THRESHOLDS, case=CASES)
+    output:
+        "Counts/reads-within-peaks.png"
+    shell:
+        "Rscript {input.script}"

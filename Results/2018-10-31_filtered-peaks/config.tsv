@@ -1,0 +1,9 @@
+Condition	Replicate	narrowPeak
+1stKD	1	"../../Data/Processed/atac_dnase/output_1stKD_TAZ/peak/macs2/rep1/967_1_S31_L007_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+1stKD	2	"../../Data/Processed/atac_dnase/output_1stKD_TAZ/peak/macs2/rep2/967_2_S35_L008_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+2ndKD	1	"../../Data/Processed/atac_dnase/output_2ndKD_TAZ/peak/macs2/rep1/1337_1_S37_L008_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+2ndKD	2	"../../Data/Processed/atac_dnase/output_2ndKD_TAZ/peak/macs2/rep2/1337_2_S32_L007_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+2ndKD	3	"../../Data/Processed/atac_dnase/output_2ndKD_TAZ/peak/macs2/rep3/1337_3_S36_L008_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+Ctrl	1	"../../Data/Processed/atac_dnase/output_Control/peak/macs2/rep1/GFP_1_S38_L008_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+Ctrl	2	"../../Data/Processed/atac_dnase/output_Control/peak/macs2/rep2/GFP_2_S33_L007_R1_001.nodup.tn5.pf.narrowPeak.gz"	
+Ctrl	3	"../../Data/Processed/atac_dnase/output_Control/peak/macs2/rep3/GFP_3_S34_L007_R1_001.nodup.tn5.pf.narrowPeak.gz"

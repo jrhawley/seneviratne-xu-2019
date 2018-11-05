@@ -3,7 +3,7 @@ rule filter_peaks:
         script = "filter-peaks.sh",
         peaks = "../../Data/Processed/180913_D00165_0223_BCCGG2ANX_Schimmer_Mingjing/output_{cond}/peak/macs2/rep{rep}/{sample}.narrowPeak.gz"
     output:
-        "FilteredPeaks/{cond}-Rep{rep}-sample.narrowPeak.gz"
+        "FilteredPeaks/{cond}-Rep{rep}-{sample}.narrowPeak.gz"
     shell:
         "python {input.script} {input.peaks} -o {output}"
 
