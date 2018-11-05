@@ -85,7 +85,7 @@ cat("Done\n")
 
 # multiple test correction based on data used
 test_results[Data == "bp", FDR := p.adjust(p, "fdr")]
-test_results[Data == "Peak", FDR := p.adjust(p, "fdr")]
+test_results[Data == "Peaks", FDR := p.adjust(p, "fdr")]
 fwrite(
     test_results,
     "Global/global-tests.tsv",

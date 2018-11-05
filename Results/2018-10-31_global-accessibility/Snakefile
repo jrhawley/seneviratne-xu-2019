@@ -3,6 +3,8 @@ import pandas as pd
 CONFIG = pd.read_table("config.tsv", index_col=False)
 PEAKS = CONFIG["PeakFile"].tolist()
 CONDITIONS = CONFIG["Condition"].unique().tolist()
+CASES = [c + "_Rep" + str(r) for (c, r)
+         in zip(CONFIG["Condition"], CONFIG["Replicate"])]
 
 rule permute_peaks_bp:
     input:
@@ -41,5 +43,54 @@ rule binary_matrix:
         consensus = "Consensus/consensus.bed"
     output:
         "Consensus/consensus-matrix.tsv"
+    shell:
+        "Rscript {input.script}"
+
+rule jaccard:
+    input:
+        script = "calculate-jaccard.sh",
+        peaks = PEAKS
+    output:
+        expand("Jaccards/{case1}.{case2}.jaccard.tsv",
+               case1=CASES, case2=CASES)
+    shell:
+        "sh {input.script}"
+
+rule plot_jaccard:
+    input:
+        script = "plot-jaccard.R",
+        js = expand("Jaccards/{case1}.{case2}.jaccard.tsv",
+                    case1=CASES, case2=CASES)
+    output:
+        "Jaccards/jaccard.png"
+    shell:
+        "Rscript {input.script}"
+
+rule jaccard_cond:
+    input:
+        script = "calculate-jaccard-condition.sh",
+        peaks = PEAKS
+    output:
+        expand("Jaccards/{con1}.{con2}.jaccard.tsv",
+               con1=CONDITIONS, con2=CONDITIONS)
+    shell:
+        "sh {input.script}"
+
+rule plot_jaccard_cond:
+    input:
+        script = "plot-jaccard-condition.R",
+        js = expand("Jaccards/{con1}.{con2}.jaccard.tsv",
+                    con1=CONDITIONS, con2=CONDITIONS)
+    output:
+        "Jaccards/jaccard-condition.png"
+    shell:
+        "Rscript {input.script}"
+
+rule upset:
+    input:
+        script = "upset.R",
+        data = "Consensus/consensus-matrix.tsv"
+    output:
+        "Consensus/upset.png"
     shell:
         "Rscript {input.script}"

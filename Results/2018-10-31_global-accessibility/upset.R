@@ -8,7 +8,7 @@ suppressMessages(library("UpSetR"))
 # Data
 # ==============================================================================
 consensus = fread(
-    "Consensus/consensus-binary-matrix.tsv",
+    "Consensus/consensus-matrix.tsv",
     header = TRUE,
     sep = "\t"
 )
@@ -16,7 +16,7 @@ consensus = fread(
 # ==============================================================================
 # Plots
 # ==============================================================================
-png("upset.png", width = 20, height = 12, units = "cm", res = 300)
+png("Consensus/upset.png", width = 20, height = 12, units = "cm", res = 300)
 upset(
     consensus,
     nsets = 8,

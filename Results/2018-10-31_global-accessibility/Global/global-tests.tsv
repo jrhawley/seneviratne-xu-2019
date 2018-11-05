@@ -1,7 +1,7 @@
 X	Y	Data	Hypothesis	Alternative	p	FDR
 Ctrl	1stKD	bp	X >= Y	less	0.0333333333333333	0.1
 Ctrl	2ndKD	bp	X >= Y	less	0.403225806451613	0.403225806451613
-Ctrl	1stKD	Peaks	X >= Y	less	0.0333333333333333	1
-Ctrl	2ndKD	Peaks	X >= Y	less	0.306451612903226	1
+Ctrl	1stKD	Peaks	X >= Y	less	0.0333333333333333	0.1
+Ctrl	2ndKD	Peaks	X >= Y	less	0.306451612903226	0.306451612903226
 1stKD	2ndKD	bp	X = Y	two.sided	0.133333333333333	0.2
-1stKD	2ndKD	Peaks	X = Y	two.sided	0.133333333333333	1
+1stKD	2ndKD	Peaks	X = Y	two.sided	0.133333333333333	0.2
