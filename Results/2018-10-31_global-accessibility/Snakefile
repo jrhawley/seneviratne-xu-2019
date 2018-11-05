@@ -1,0 +1,22 @@
+import pandas as pd
+
+CONFIG = pd.read_table("config.tsv", index_col=False)
+PEAKS = CONFIG["PeakFile"].tolist()
+
+rule permute_peaks_bp:
+    input:
+        script = "count-bp-and-peaks.sh",
+        peaks = PEAKS
+    output:
+        "num-peaks-bp.tsv"
+    shell:
+        "sh {input.script}"
+
+rule test_depth_support:
+    input:
+        script = "plot-global-acc.R",
+        data = "num-peaks-bp.tsv"
+    output:
+        "peaks-bp.png"
+    shell:
+        "Rscript {input.script}"

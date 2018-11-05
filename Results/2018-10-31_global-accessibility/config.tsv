@@ -1,0 +1,9 @@
+Condition	Replicate	PeakFile
+1stKD	1	"../2018-10-31_filtered-peaks/Filter/logq_2.5/1stKD_Rep1.bedGraph"
+1stKD	2	"../2018-10-31_filtered-peaks/Filter/logq_2.5/1stKD_Rep2.bedGraph"
+2ndKD	1	"../2018-10-31_filtered-peaks/Filter/logq_2.5/2ndKD_Rep1.bedGraph"
+2ndKD	2	"../2018-10-31_filtered-peaks/Filter/logq_2.5/2ndKD_Rep2.bedGraph"
+2ndKD	3	"../2018-10-31_filtered-peaks/Filter/logq_2.5/2ndKD_Rep3.bedGraph"
+Ctrl	1	"../2018-10-31_filtered-peaks/Filter/logq_2.5/Ctrl_Rep1.bedGraph"
+Ctrl	2	"../2018-10-31_filtered-peaks/Filter/logq_2.5/Ctrl_Rep2.bedGraph"
+Ctrl	3	"../2018-10-31_filtered-peaks/Filter/logq_2.5/Ctrl_Rep3.bedGraph"

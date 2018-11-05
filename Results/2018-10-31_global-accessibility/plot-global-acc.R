@@ -55,61 +55,73 @@ peaks = fread("num-peaks-bp.tsv")
 # ==============================================================================
 # Analysis
 # ==============================================================================
+# hypothesis test placeholder
+test_results = data.table(
+    X = rep(c("Ctrl", "1stKD"), c(4, 2)),
+    Y = c("1stKD", "2ndKD", "1stKD", "2ndKD", "2ndKD", "2ndKD"),
+    Data = c("bp", "bp", "Peaks", "Peaks", "bp", "Peaks"),
+    Hypothesis = rep(c("X >= Y", "X = Y"), c(4, 2)),
+    Alternative = rep(c("less", "two.sided"), c(4, 2)),
+    p = 1,
+    FDR = 1
+)
+
 # testing for differences in bp accessibility
-bp_ctrl_kd1 <- perm2samp(
-    peaks[Condition == "Ctrl", bp],
-    peaks[Condition == "1stKD", bp],
-    alternative = "less"
-)
-bp_ctrl_kd2 <- perm2samp(
-    peaks[Condition == "Ctrl", bp],
-    peaks[Condition == "2ndKD", bp],
-    alternative = "less"
-)
-bp_kd1_kd2 <- perm2samp(
-    peaks[Condition == "1stKD", bp],
-    peaks[Condition == "2ndKD", bp]
+cat("Permutation tests\n")
+for (i in 1:test_results[, .N]) {
+    x = test_results[i, X]
+    y = test_results[i, Y]
+    dtype = test_results[i, Data]
+    alt = test_results[i, Alternative]
+    cat(x, y, dtype, alt, "\n")
+    res = perm2samp(
+        peaks[Condition == x, get(dtype)],
+        peaks[Condition == y, get(dtype)],
+        alternative = alt
+    )
+    test_results[i, p := res$p]
+}
+cat("Done\n")
+
+# multiple test correction based on data used
+test_results[Data == "bp", FDR := p.adjust(p, "fdr")]
+test_results[Data == "Peak", FDR := p.adjust(p, "fdr")]
+fwrite(
+    test_results,
+    "global-tests.tsv",
+    col.names = TRUE,
+    sep = "\t"
 )
 
-# testing for differences in number of peaks
-peak_ctrl_kd1 <- perm2samp(
-    peaks[Condition == "Ctrl", Peaks],
-    peaks[Condition == "1stKD", Peaks],
-    alternative = "less"
+# melt for facetted plotting
+peaks_melted = melt(
+    peaks,
+    id.vars = c("Condition", "Replicate"),
+    measure.vars = c("Peaks", "bp"),
+    variable.name = "dtype",
+    value.name = "Count"
 )
-peak_ctrl_kd2 <- perm2samp(
-    peaks[Condition == "Ctrl", Peaks],
-    peaks[Condition == "2ndKD", Peaks],
-    alternative = "less"
-)
-peak_kd1_kd2 <- perm2samp(
-    peaks[Condition == "1stKD", Peaks],
-    peaks[Condition == "2ndKD", Peaks]
-)
-
 
 # ==============================================================================
 # Plots
 # ==============================================================================
 gg <- (
-    ggplot(peaks)
-    + geom_point(aes(x = Condition, y = bp, colour = Condition), size = 2)
-    + ggtitle("Number of bp in peaks per sample")
+    ggplot(peaks_melted)
+    + geom_col(
+        aes(
+            x = Condition,
+            y = Count,
+            fill = Condition,
+            group = Replicate
+        ),
+        size = 2,
+        position = position_dodge(width = 1.0)
+    )
+    + labs(title = "Peak and bp counts per sample")
+    + facet_wrap(~ dtype, scale = "free_y")
 )
 ggsave(
-    "bp.png",
-    height = 12,
-    width = 20,
-    units = "cm"
-)
-
-gg <- (
-    ggplot(peaks)
-    + geom_point(aes(x = Condition, y = Peaks, colour = Condition), size = 2)
-    + ggtitle("Number of peaks per sample")
-)
-ggsave(
-    "peaks.png",
+    "peaks-bp.png",
     height = 12,
     width = 20,
     units = "cm"

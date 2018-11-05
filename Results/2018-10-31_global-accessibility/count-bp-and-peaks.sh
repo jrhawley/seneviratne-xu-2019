@@ -9,7 +9,7 @@ for i in `seq 0 7`;
 do
     cond=${CONDITIONS[$i]}
     rep=${REPS[$i]}
-    peak="../2018-10-31_filtered-peaks/Filter/logq_2.5/${cond}_Rep${rep}.filtered.narrowPeak"
+    peak="../2018-10-31_filtered-peaks/Filter/logq_2.5/${cond}_Rep${rep}.bedGraph"
     echo "$cond Rep$rep"
 
     npeak=$(cat $peak | wc -l)
