@@ -39,3 +39,18 @@ My quantile cutoff is lower than before, but still reasonably high (~ 0.6).
 Again, it appears that there is no significant difference between the 2ndKD and the Ctrl.
 
 I'll ask Aditi again tomorrow about these results, to see what these results mean to her.
+
+## 2018-11-08
+
+I followed up with Aditi, and I'm surprised that after following her advice of running DEseq separately on 1stKD-Ctrl and 2ndKD-Ctrl, instead of all together as I've been doing, I get no significant results in either condition.
+Here are the histograms of p-values after analyzing the comparisons separately:
+
+![1stKD vs Ctrl histogram of p-values](DEseq/SeparatedAnalyses/1stKD-Ctrl.pvalues.png)
+![2ndKD vs Ctrl histogram of p-values](DEseq/SeparatedAnalyses/2ndKD-Ctrl.pvalues.png)
+
+These are much more uniform than the ones I got when I ran all samples together:
+![Combined histogram of p-values](DEseq/CombinedAnalyses/pvalues.png)
+
+I think this is because the 3-condition comparison uses a consensus set that is dominated by the peaks in the 1stKD.
+Overall, this is very strange and I'm not sure what to do here.
+I don't know if I can really make any conclusive statements with this data.

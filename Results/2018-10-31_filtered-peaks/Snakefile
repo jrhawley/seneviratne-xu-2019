@@ -36,7 +36,8 @@ rule multifilter_peaks:
         bgs = expand(
             "BedGraphs/{case}.filtered.sorted.unique.bedGraph", case=CASES)
     output:
-        expand("Filter/logq_{t}/{case}.bedGraph", t=THRESHOLDS, case=CASES)
+        expand("Filter/logq_{t}/{case}.bedGraph", t=THRESHOLDS, case=CASES),
+        expand("Filter/logq_{t}/{case}.bed", t=THRESHOLDS, case=CASES)
     shell:
         "Rscript {input.script}"
 
@@ -67,3 +68,11 @@ rule plot_reads_in_peaks:
         "Counts/reads-within-peaks.png"
     shell:
         "Rscript {input.script}"
+
+rule bigWig2TDF:
+    input:
+        script = "signal2TDF.sh"
+    output:
+        expand("TDF/{case}.tdf", case=CASES)
+    shell:
+        "sh {input.script}"

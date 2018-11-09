@@ -36,10 +36,20 @@ for (i in 1:peak_metadata[, .N]) {
     )
 
     for (threshold in c(1, 2, 2.5, 3, 4, 5)) {
+        # filter by threshold
+        filtered_peaks = peaks[logq >= threshold, .SD]
+        # write bedGraph with -log01(q)
+        fwrite(
+            filtered_peaks,
+            paste0("Filter/logq_", threshold, "/", peak_metadata[i, Condition], "_Rep", peak_metadata[i, Replicate], ".bedGraph"),
+            col.names = FALSE,
+            sep = "\t"
+        )
+        # write regular BED file
         fwrite(
             # filter by threshold
-            peaks[logq >= threshold, .SD],
-            paste0("Filter/logq_", threshold, "/", peak_metadata[i, Condition], "_Rep", peak_metadata[i, Replicate], ".bedGraph"),
+            filtered_peaks[, .SD, .SDcols = c("chr", "start", "end")],
+            paste0("Filter/logq_", threshold, "/", peak_metadata[i, Condition], "_Rep", peak_metadata[i, Replicate], ".bed"),
             col.names = FALSE,
             sep = "\t"
         )

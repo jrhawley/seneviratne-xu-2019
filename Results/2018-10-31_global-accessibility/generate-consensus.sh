@@ -38,6 +38,11 @@ do
     awk -v FS="\t" -v OFS="\t" '{print $1, $2, $3}' Consensus/${i}.bedGraph > Consensus/${i}.bed
 done
 
-# generate consensus from the intersections
-echo "Generating consensus"
+# generate consensus for all 3 conditions from the intersections
+echo "Generating 3-condition consensus"
 cat Consensus/*.bed | sort -k1,1 -k 2,2n | bedtools merge -i stdin > Consensus/consensus.bed
+
+# generate consensus for all 3 conditions from the intersections
+echo "Generating 2-condition consensuses"
+cat Consensus/1stKD.bed Consensus/Ctrl.bed | sort -k1,1 -k 2,2n | bedtools merge -i stdin > Consensus/consensus.1stKD-Ctrl.bed
+cat Consensus/2ndKD.bed Consensus/Ctrl.bed | sort -k1,1 -k 2,2n | bedtools merge -i stdin > Consensus/consensus.2ndKD-Ctrl.bed

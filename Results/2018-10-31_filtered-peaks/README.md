@@ -37,6 +37,8 @@ The number of total (non-duplicate) reads for each sample is as follows (as dete
 
 I then counted the number of reads that align to the peaks filtered at various thresholds via `qsub count-reads-in-peaks.sh`.
 The result is also stored in `Counts/mapped-reads.tsv`.
+My first attempt at this may have underestimated the true percentage of reads in peaks because I filtered the X, Y, M, and non-canonical chromosomes, but did not filter those chromosomes from the mapped read counts.
+This has since been updated and corrected for, making use of `hg38-chrom-sizes.bed`, which was downloaded on 2018-11-08 from https://github.com/igvteam/igv/blob/master/genomes/sizes/hg38.chrom.sizes.
 
 We get the following percentages for reads called within peaks (generated via `Rscript plot-reads-in-peaks.R`):
 
@@ -46,8 +48,12 @@ As can be seen in the figure above, the drop-offs are pretty linear wrt the thre
 Using a threshold of 2.5 is a good middle-of-the-pack cutoff with peak counts in the 17K - 82K range across all samples.
 
 The 1stKD has the best signal-to-noise ratio for its samples, since the percentage of reads in peaks is ~ 18% for this threshold, whereas for the 2ndKD it's beween 2.5-8%, and 5-10% for the controls.
+**This might be a cause for concern.**
+Aditi mentioned that this seemed extremely low, and some of the GBM samples she had ATAC data for were closer to 38%.
+So it may be possible that these experimental results were just really poor.
 
 ## Conclusions
 
 Using a q-value threshold of -log10(q) >= 2.5 is a good threshold that keeps reasonable read counts and moderate signal-to-noise ratios across all samples.
 I'll be using the peak list from these filtered peaks moving forward.
+It's worth keeping in mind that this data may be very noisy, and not as valuable as initially thought.

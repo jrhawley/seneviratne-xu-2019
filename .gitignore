@@ -106,11 +106,14 @@ venv.bak/
 # sequencing data
 *.ba[im]
 *.bed
+*.bedGraph
 *.gz
 *.tbi
 *.tar
 *.bigwig
+*.wig
 *.narrowPeak
+*.tdf
 
 # spreadsheets
 *.xls

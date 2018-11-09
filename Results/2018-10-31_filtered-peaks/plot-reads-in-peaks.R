@@ -45,7 +45,7 @@ for (i in 1:length(peak_metadata$Condition)) {
     peak_metadata[i, Count := dt[, sum(count)]]
 }
 
-peak_metadata[, Fraction := (Count / MappedReads)]
+peak_metadata[, Fraction := (Count / (MappedReads - NonCanonicalChromMappedReads))]
 peak_metadata[, Percentage := 100 * Fraction]
 
 # ==============================================================================

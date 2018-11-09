@@ -11,17 +11,33 @@ BAMS=( \
 CONDITIONS=("1stKD" "1stKD" "2ndKD" "2ndKD" "2ndKD" "Ctrl" "Ctrl" "Ctrl")
 REPS=(1 2 1 2 3 1 2 3)
 
+# list of chromosomes that are removed from further analyses
+NC_CHROMS=($(awk '{if (NR >= 23) print $1}' hg38-chrom-sizes.bed))
+
 OUTPUT="Counts/mapped-reads.tsv"
 
-echo -e "Condition\tReplicate\tMappedReads" > $OUTPUT
+echo -e "Condition\tReplicate\tMappedReads\tNonCanonicalChromMappedReads" > $OUTPUT
 
+echo "Counting mapped reads"
 for i in `seq 0 7`;
 do
     con=${CONDITIONS[$i]}
     rep=${REPS[$i]}
     bam=${BAMS[$i]}
-    echo "$con $rep"
+    echo "  $con $rep"
+    # total number of mapped reads
+    echo -e "    Total number of mapped reads"
     count=$(samtools view -F 0x04 -c $bam)
-
-    echo -e "${con}\t${rep}\t${count}" >> $OUTPUT
+    echo -e "      ${count}"
+    # total number of mapped reads to removed chromosomes
+    echo -e "    Total number of mapped reads to removed chromosomes"
+    nc_count=0
+    for chr in ${NC_CHROMS[@]};
+    do
+        echo $chr
+        nc_count=$((${nc_count} + $(samtools view -F 0x04 -c $bam $chr)))
+        echo "  ${nc_count}"
+    done
+    echo -e "      ${nc_count}"
+    echo -e "${con}\t${rep}\t${count}\t${nc_count}" >> $OUTPUT
 done
