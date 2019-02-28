@@ -9,3 +9,6 @@ align:
 
 subsample_tagalign:
   params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+gen_pseudo:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
