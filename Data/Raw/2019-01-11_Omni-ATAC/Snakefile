@@ -1,0 +1,170 @@
+import pandas as pd
+import os.path as path
+
+# ==============================================================================
+# Configuration
+# ==============================================================================
+CONFIG = pd.read_csv('config.tsv', index_col=False, sep='\t')
+
+FASTQ_DIR = 'FASTQs'
+REPORT_DIR = 'Reports'
+TRIM_DIR = 'Trimmed'
+ALIGN_DIR = 'Aligned'
+PEAKS_DIR = 'Peaks'
+
+PIPELINE_DIR = '/mnt/work1/users/lupiengroup/CommonScripts/atac-seq-pipeline/src'
+BWT2_IDX = '/mnt/work1/data/genomes/human/hg38/iGenomes/Sequence/Bowtie2Index/genome'
+
+SAMPLES = [c + '_Rep' +
+           str(r) for (c, r) in zip(CONFIG['Condition'], CONFIG['Replicate'])]
+
+# ==============================================================================
+# Meta Rules
+# ==============================================================================
+rule all_trim:
+    input:
+        expand(
+            path.join(TRIM_DIR, '{sample}.trimmed.fastq.gz'),
+            sample=SAMPLES
+        )
+
+rule all_align:
+    input:
+        expand(
+            path.join(ALIGN_DIR, '{sample}.sorted.bam'),
+            sample=SAMPLES
+        )
+
+rule all_postalign:
+    input:
+        expand(
+            path.join(ALIGN_DIR, '{sample}.sorted.filtered.bam'),
+            sample=SAMPLES
+        ),
+        expand(
+            path.join(ALIGN_DIR, '{sample}.sorted.filtered.dedup.bam'),
+            sample=SAMPLES
+        ),
+        expand(
+            path.join(REPORT_DIR, '{sample}.duplication.txt'),
+            sample=SAMPLES
+        ),
+        # expand(
+        #     path.join(ALIGN_DIR, '{sample}.25M.tagAlign.gz'),
+        #     sample=SAMPLES
+        # ),
+
+
+# ==============================================================================
+# Rules
+# ==============================================================================
+# Trimming
+# -------------------------------------
+rule detect_adapter:
+    input:
+        script = path.join(PIPELINE_DIR, 'detect_adapter.py'),
+        fastq = path.join(FASTQ_DIR, '{sample}.fastq.gz')
+    output:
+        path.join(REPORT_DIR, '{sample}.adapter.txt')
+    shell:
+        'python {input.script} {input.fastq} > {output}'
+
+rule trim:
+    input:
+        path.join(FASTQ_DIR, '{sample}.fastq.gz')
+    output:
+        fq = path.join(TRIM_DIR, '{sample}.trimmed.fastq.gz'),
+        rpt = path.join(REPORT_DIR, '{sample}.trim.txt')
+    params:
+        '-m 5 -e 0.2 -a CTGTCTCTTATA'
+    shell:
+        'cutadapt {params} {input} 2> {output.rpt} | gzip -nc > {output.fq}'
+
+# Alignment
+# -------------------------------------
+rule align:
+    input:
+        path.join(TRIM_DIR, '{sample}.trimmed.fastq.gz')
+    output:
+        bam = path.join(ALIGN_DIR, '{sample}.bam'),
+        rpt = path.join(REPORT_DIR, '{sample}.align.txt')
+    params:
+        '-k 4 --local -x {bwt2_idx} --threads 4'.format(bwt2_idx=BWT2_IDX)
+    shell:
+        'bowtie2 {params} -U {input} 2> {output.rpt} | samtools view -u > {output.bam}'
+
+# Post-alignment filtering
+# -------------------------------------
+# Remove unmapped, non-primary, or failing alignments
+rule filter_alignments:
+    input:
+        script = path.join(PIPELINE_DIR, 'assign_multimappers.py'),
+        bam = path.join(ALIGN_DIR, '{sample}.sorted.bam')
+    output:
+        path.join(ALIGN_DIR, '{sample}.sorted.filtered.bam')
+    params:
+        '-k 4'
+    shell:
+        'sambamba view -h {input.bam} | {input.script} {params} | samtools view -F 1804 -Su /dev/stdin | sambamba sort /dev/stdin -o {output}'
+
+# mark duplicates and get duplication stats
+rule markdup:
+    input:
+        path.join(ALIGN_DIR, '{sample}.sorted.filtered.bam')
+    output:
+        path.join(REPORT_DIR, '{sample}.duplication.txt')
+    run:
+        commands = [
+            'sambamba markdup {input} {wildcards.sample}.markdup.bam',
+            'sambamba flagstat {wildcards.sample}.markdup.bam > {output}',
+            'rm {wildcards.sample}.markdup.bam'
+        ]
+        command_str = '; '.join(commands)
+        shell(command_str)
+
+# remove duplicates
+rule dedup:
+    input:
+        path.join(ALIGN_DIR, '{sample}.sorted.filtered.bam')
+    output:
+        path.join(ALIGN_DIR, '{sample}.sorted.filtered.dedup.bam')
+    shell:
+        'sambamba markdup -r {input} {output}'
+
+# create tagAlign files
+rule tagalign:
+    input:
+        path.join(ALIGN_DIR, '{sample}.bam')
+    output:
+        path.join(ALIGN_DIR, '{sample}.tagAlign.gz')
+    shell:
+        'bedtools bamtobed -i {input} | awk -v FS="\t" -v OFS="\t" \'{{$4="N"; $5="1000"; print $0}}\' | gzip -nc  > {output}'
+
+# subsample tagAlign files
+rule subsample_tagalign:
+    input:
+        path.join(ALIGN_DIR, '{sample}.tagAlign.gz')
+    output:
+        path.join(ALIGN_DIR, '{sample}.25M.tagAlign.gz')
+    shell:
+        'zcat {input} | grep -v "chrM" | shuf -n 25000000 --random-source {input} | gzip -nc > {output}'
+
+
+rule gen_pseudoreps:
+    input:
+        'infile'
+    output:
+        'outfile'
+    shell:
+        'command'
+
+# Miscellaneous
+# -------------------------------------
+rule sort:
+    input:
+        '{file}.bam'
+    output:
+        '{file}.sorted.bam',
+        '{file}.sorted.bam.bai'
+    shell:
+        'sambamba sort {input} -o {output[0]}'

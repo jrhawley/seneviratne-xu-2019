@@ -1,0 +1,11 @@
+__default__:
+  params: '-cwd -V -q light.q'
+
+trim:
+  params: '-cwd -V -q lupiengroup -l h_vmem=12G -l mem_requested=12G'
+
+align:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+subsample_tagalign:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
