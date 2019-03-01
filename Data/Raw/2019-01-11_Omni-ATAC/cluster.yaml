@@ -12,3 +12,18 @@ subsample_tagalign:
 
 gen_pseudo:
   params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+callpeak:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+slop_pval:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+slop_fold:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+bdgcmpp:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'
+
+bdgcmp_signalval:
+  params: '-cwd -V -q lupiengroup -l h_vmem=16G -l mem_requested=16G'

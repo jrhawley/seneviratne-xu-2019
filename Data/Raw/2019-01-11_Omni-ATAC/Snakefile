@@ -13,8 +13,9 @@ TRIM_DIR = 'Trimmed'
 ALIGN_DIR = 'Aligned'
 PEAKS_DIR = 'Peaks'
 
-PIPELINE_DIR = '/mnt/work1/users/lupiengroup/CommonScripts/atac-seq-pipeline/src'
-BWT2_IDX = '/mnt/work1/data/genomes/human/hg38/iGenomes/Sequence/Bowtie2Index/genome'
+PIPELINE_DIR = '../../External/atac-seq-pipeline/src'
+BWT2_IDX = '../../External/Bowtie2Index/genome'
+CHR_SIZES = '../../External/hg38.chrom.sizes'
 
 CONDITIONS = np.unique(CONFIG['Condition'])
 REPLICATES = np.unique(CONFIG['Replicate'])
@@ -75,6 +76,18 @@ rule all_postalign:
             condition=CONDITIONS,
             r=REPLICATES,
             pr=['pr1', 'pr2']
+        )
+
+rule all_peaks:
+    input:
+        expand(
+            path.join(PEAKS_DIR, '{sample}_peaks.narrowPeak.gz'),
+            sample=SAMPLES
+        ),
+        expand(
+            path.join(PEAKS_DIR, '{sample}.{type}.signal.sorted.bedGraph'),
+            sample=SAMPLES,
+            type=['fc', 'pval']
         ),
 
 
@@ -224,18 +237,121 @@ rule gen_pool_pseudo:
 
 # Call peaks
 # -------------------------------------
-rule call_peaks:
+rule callpeak:
     input:
-        'infile'
+        path.join(ALIGN_DIR, '{sample}.tagAlign.gz')
     output:
-        'outfile'
+        path.join(PEAKS_DIR, '{sample}_control_lambda.bdg'),
+        temp(path.join(PEAKS_DIR, '{sample}_peaks.narrowPeak')),
+        path.join(PEAKS_DIR, '{sample}_peaks.xls'),
+        path.join(PEAKS_DIR, '{sample}_summits.bed'),
+        path.join(PEAKS_DIR, '{sample}_treat_pileup.bdg')
+    params:
+        lambda wildcards:
+            ' '.join([
+                '-f BED',
+                '-g 2.7e9',
+                '--keep-dup all',
+                '--outdir {}'.format(PEAKS_DIR),
+                '-n {}'.format(wildcards.sample),
+                '-B',
+                '--SPMR',
+                '--nomodel',
+                '--shift -75',
+                '--extsize 150',
+                '-p 0.01',
+                '--call-summits'
+            ])
     shell:
-        'command'
+        # MACS v2.1.0
+        'macs2 callpeak -t {input} {params}'
 
+rule zip_narrowpeak:
+    input:
+        path.join(PEAKS_DIR, '{sample}_peaks.narrowPeak')
+    output:
+        path.join(PEAKS_DIR, '{sample}_peaks.narrowPeak.gz')
+    shell:
+        'sort -k 8gr,8gr {input} | awk -v OFS="\t" \'{{$4="Peak_"NR; print $0}}\' | head -n 300000 | gzip -nc > {output}'
+
+rule bdgcmp:
+    input:
+        trmt = path.join(PEAKS_DIR, '{sample}_treat_pileup.bdg'),
+        ctrl = path.join(PEAKS_DIR, '{sample}_control_lambda.bdg')
+    output:
+        temp(path.join(PEAKS_DIR, '{sample}_FE.bdg'))
+    params:
+        lambda wildcards:
+            '--o-prefix {} -m FE'.format(path.join(PEAKS_DIR,
+                                                   wildcards.sample))
+    shell:
+        'macs2 bdgcmp -t {input.trmt} -c {input.ctrl} {params}'
+
+rule slop_fold:
+    input:
+        fe = path.join(PEAKS_DIR, '{sample}_FE.bdg'),
+        chrsize = '../../External/hg38.chrom.sizes'
+    output:
+        temp(path.join(PEAKS_DIR, '{sample}.fc.signal.bedGraph'))
+    shell:
+        'bedtools slop -i {input.fe} -g {input.chrsize} -b 0 | grep -v "chrEBV" | bedClip stdin {input.chrsize} {output}'
+
+rule signal_bigwig:
+    input:
+        fc = path.join(PEAKS_DIR, '{sample}.fc.signal.sorted.bedGraph'),
+        chrsize = '../../External/hg38.chrom.sizes'
+    output:
+        path.join(PEAKS_DIR, '{sample}.fc.signal.bigWig')
+    shell:
+        'bedGraphToBigWig {input.fc} {input.chrsize} {output}'
+
+rule bdgcmp_signalval:
+    input:
+        tag = path.join(ALIGN_DIR, '{sample}.tagAlign.gz'),
+        trmt = path.join(PEAKS_DIR, '{sample}_treat_pileup.bdg'),
+        ctrl = path.join(PEAKS_DIR, '{sample}_control_lambda.bdg')
+    output:
+        temp(path.join(PEAKS_DIR, '{sample}_ppois.bdg'))
+    params:
+        lambda wildcards, input:
+            ' '.join([
+                '--o-prefix {}'.format(path.join(PEAKS_DIR, wildcards.sample)),
+                '-m ppois',
+                '-S $(echo "scale=6; $(zcat {} | wc -l) / 1000000" | bc)'.format(input.tag)
+            ])
+    shell:
+        'macs2 bdgcmp -t {input.trmt} -c {input.ctrl} {params}'
+
+rule slop_pval:
+    input:
+        pp = path.join(PEAKS_DIR, '{sample}_ppois.bdg'),
+        chrsize = '../../External/hg38.chrom.sizes'
+    output:
+        temp(path.join(PEAKS_DIR, '{sample}.pval.signal.bedGraph'))
+    shell:
+        'bedtools slop -i {input.pp} -g {input.chrsize} -b 0 | grep -v "chrEBV" | bedClip stdin {input.chrsize} {output}'
+
+# Filter blacklist regions
+# -------------------------------------
+rule filter_blacklist:
+    input:
+        peaks = path.join(PEAKS_DIR, '{sample}_peaks.narrowPeak.gz'),
+        blacklist = '../../External/hg38.blacklist.bed'
+    output:
+        path.join(PEAKS_DIR, '{sample}_peaks.filtered.narrowPeak.gz')
+    run:
+        commands = [
+            'bedtools intersect -v -a {input.peaks} -b {input.blacklist}',
+            'awk -v OFS="\\t" \'\{if ($5 > 1000) $5=1000; print $0\}\'',
+            'grep -P "chr[\\dXY]|[\t]"',
+            'gzip -nc > {output}'
+        ]
+        command_str = ' | '.join(commands)
+        shell(command_str)
 
 # Miscellaneous
 # -------------------------------------
-rule sort:
+rule sort_bam:
     input:
         '{file}.bam'
     output:
@@ -243,3 +359,13 @@ rule sort:
         '{file}.sorted.bam.bai'
     shell:
         'sambamba sort {input} -o {output[0]}'
+
+rule sort_bed:
+    input:
+        '{file}.{ext}'
+    output:
+        '{file}.sorted.{ext}'
+    wildcard_constraints:
+        ext = 'bed(Graph)?'
+    shell:
+        'sort -k1,1 -V -k2,2n {input} > {output}'

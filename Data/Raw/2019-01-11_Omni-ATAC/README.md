@@ -11,3 +11,12 @@ Hopefully this data looks better.
 
 The samples are single-end, 50bp sequenced.
 See HTML reports in `Reports/` for details.
+
+## Results
+
+### Duplication rates
+
+Base calls are high quality, but sequence duplication levels are very high (~ 41-54%).
+This is a bit concerning, but each sample has > 75M reads total, so I'll be left with 35-50M reads after deduplication.
+
+## Called peaks
