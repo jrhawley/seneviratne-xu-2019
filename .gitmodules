@@ -1,0 +1,3 @@
+[submodule "Data/External/atac-seq-pipeline"]
+	path = Data/External/atac-seq-pipeline
+	url = git@github.com:ENCODE-DCC/atac-seq-pipeline.git
